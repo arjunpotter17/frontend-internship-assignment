@@ -1,23 +1,49 @@
 <div class="header">
   <div class="tw-text-24-px tw-font-600">Open Books Library</div>
   <div class="search-button">
-    <mat-icon class="tw-mt-16-px" aria-label="Search Icon">search</mat-icon>
-    <input
-      [formControl]="bookSearch"
-      name="searchKey"
-      type="text"
-      placeholder="Search Books"
-      class="tw-border-0 tw-bg-inherit"
-    >
+    <input [formControl]="bookSearch" id="searchbox" name="searchKey" value="SearchKey" type="text"
+      placeholder="Search Books" class="tw-border-0 tw-bg-inherit tw-w-full focus:tw-outline-none"
+      (keyup.enter)="clicker($event)">
+    <mat-icon aria-label="Search Icon">search</mat-icon>
+
   </div>
 </div>
-<div class="tw-flex tw-flex-row tw-m-24-px">
+<div class="tw-flex tw-flex-col md:tw-flex-row tw-m-24-px">
   <section class="trending-subjects">
-    <div class="tw-font-600 tw-text-24-px">Trending Subjects</div>
-    <ul class="tw-list-none tw-pl-0">
-      <li class="tw-text-16-px tw-cursor-pointer tw-p-12-px" *ngFor="let subject of trendingSubjects" routerLink="/trending-subject/{{ subject.name }}">
-        {{ subject.name }}
-      </li>
-    </ul>
+    <div class="tw-font-600 tw-text-24-px tw-text-center">Trending Subjects</div>
+    <div class="tw-overflow-auto tw-scrollbar-thin tw-scrollbar-track-slate-500 tw-scrollbar-thumb-slate-300">
+      <ul class="tw-list-none tw-pl-0 tw-flex md:tw-block">
+        <li class="tw-text-16-px tw-cursor-pointer tw-pt-12-px tw-min-w-[100px] tw-text-center"
+          *ngFor="let subject of trendingSubjects" routerLink="/trending-subject/{{ subject.name }}">
+          {{ subject.name }}
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="tw-flex-1 tw-flex tw-items-center tw-justify-center">
+    <div *ngIf="searchToggle == false; else Books" class="tw-w-full tw-text-center tw-mt-8">
+      Search for a book!
+    </div>
+    <ng-template #Books>
+      <div class="tw-flex-1">
+        <div *ngIf="novalues == false" class="tw-mx-auto w-full">
+          <front-end-internship-assignment-table-view [booksList]="partValues" [subjectName]="searchTerm"
+            [outputLength]="outputLength"></front-end-internship-assignment-table-view>
+
+        </div>
+
+        <div *ngIf="novalues == true">
+          <div class="tw-h-full tw-flex tw-justify-center tw-items-center">
+            Book not in our library yet!
+          </div>
+        </div>
+        <footer *ngIf="novalues == false" class="tw-flex tw-items-center tw-justify-center tw-m-24-px ">
+          <button (click)="prevPage()" class="button tw-mr-2 hover:tw-cursor-pointer">Prev</button>
+          <span>{{count}}/{{outputLength/10}}</span>
+          <button (click)="nextPage()" class="button tw-ml-2 hover:tw-cursor-pointer">Next</button>
+        </footer>
+      </div>
+    </ng-template>
   </section>
 </div>

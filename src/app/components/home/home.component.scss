@@ -1,12 +1,13 @@
 .header {
   @apply
   tw-flex
-  tw-flex-row
+  tw-flex-col
   tw-justify-between
   tw-items-center
   tw-rounded-4-px
   tw-p-12-px
-  tw-m-24-px;
+  tw-m-24-px
+  md:tw-flex-row;
   background: linear-gradient(146deg, #e1eeff 19.67%, #ffe4fb 127.56%);
 }
 
@@ -14,12 +15,18 @@
   @apply
   tw-border 
   tw-border-solid 
+  tw-mt-5
+  md:tw-mt-0
   tw-border-dark-border
   tw-rounded-4-px
   tw-flex
-  tw-justify-center
-  tw-h-60-px
-  tw-w-200-px
+  tw-justify-between
+  tw-items-center
+  tw-h-40-px
+  tw-w-full
+  md:tw-max-w-lg
+  tw-p-1
+
 }
 
 .trending-subjects {
@@ -28,4 +35,20 @@
   tw-p-12-px
   tw-rounded-4-px
   tw-shadow-lg
+  tw-w-full
+  md:tw-w-auto
+}
+
+.button{
+  background: linear-gradient(146deg, #e1eeff 19.67%, #ffe4fb 127.56%);
+  -webkit-box-shadow: 9px 14px 34px -17px rgba(0,0,0,0.64);
+-moz-box-shadow: 9px 14px 34px -17px rgba(0,0,0,0.64);
+box-shadow: 9px 14px 34px -17px rgba(0,0,0,0.64);
+border: none;
+padding:10px;
+border-radius: 5px;
+}
+
+.border{
+  border: 2px solid green;
 }

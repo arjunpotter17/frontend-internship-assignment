@@ -8,6 +8,8 @@ import { HomeComponent } from '../app/components/home/home.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgxUiLoaderModule } from "ngx-ui-loader";
+import {NgxPaginationModule} from 'ngx-pagination';
 
 
 @NgModule({
@@ -18,8 +20,10 @@ import { ReactiveFormsModule } from '@angular/forms';
     AppRoutingModule,
     HttpClientModule,
     SharedModule,
-    ReactiveFormsModule
-  ],
+    ReactiveFormsModule,
+    NgxUiLoaderModule,
+    NgxPaginationModule
+ ],
   providers: [],
   bootstrap: [AppComponent],
 })

@@ -1,6 +1,15 @@
-<div *ngIf="allBooks.length > 0">
-  <front-end-internship-assignment-table-view
-  [booksList]="allBooks"
-  [subjectName]="subjectName"
-  ></front-end-internship-assignment-table-view>
+<div>
+  <button routerLink="/" class="background tw-px-4 tw-border-none tw-py-2 tw-rounded-lg tw-mt-24-px tw-ml-24-px tw-shadow-lg hover:tw-cursor-pointer">Back</button>
+  <div *ngIf="novalues == false">
+    <front-end-internship-assignment-table-view
+    [booksList]="allBooks"
+    [subjectName]="subjectName"
+    ></front-end-internship-assignment-table-view>
+  </div>
+  
+  <div *ngIf="novalues == true">
+    <div class="tw-h-full tw-flex tw-justify-center tw-items-center">
+      Book not in our library yet!
+    </div>
+  </div>
 </div>

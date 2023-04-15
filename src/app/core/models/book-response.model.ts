@@ -3,6 +3,7 @@ export interface Author {
   name: string;
 }
 
+
 export interface Availability {
   status: string;
   available_to_browse: boolean;
@@ -38,11 +39,14 @@ export interface Book {
   lending_edition: string;
   lending_identifier: string;
   authors: Author[];
+  author_name: string[];
   first_publish_year: number;
   ia: string;
   public_scan: boolean;
   has_fulltext: boolean;
   availability: Availability;
+  author_key: string;
+  public_scan_b: boolean;
 }
 
 export interface BookResponse {
@@ -51,4 +55,5 @@ export interface BookResponse {
   subject_type: string;
   work_count: number;
   works: Book[];
+  docs: Book[];
 }
