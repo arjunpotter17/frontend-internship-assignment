@@ -3,10 +3,11 @@
   <div class="search-button">
     <input [formControl]="bookSearch" id="searchbox" name="searchKey" value="SearchKey" type="text"
       placeholder="Search Books" class="tw-border-0 tw-bg-inherit tw-w-full focus:tw-outline-none"
-      (keyup.enter)="clicker($event)">
-    <mat-icon aria-label="Search Icon">search</mat-icon>
+      (keyup.enter)="clicker()">
+    <mat-icon aria-label="Search Icon" (click) = clicker()>search</mat-icon>
 
   </div>
+
 </div>
 <div class="tw-flex tw-flex-col md:tw-flex-row tw-m-24-px">
   <section class="trending-subjects">
@@ -28,8 +29,8 @@
     <ng-template #Books>
       <div class="tw-flex-1">
         <div *ngIf="novalues == false" class="tw-mx-auto w-full">
-          <front-end-internship-assignment-table-view [booksList]="partValues" [subjectName]="searchTerm"
-            [outputLength]="outputLength"></front-end-internship-assignment-table-view>
+          <front-end-internship-assignment-table-view [booksList]="allBooks" [subjectName]="searchTerm"
+           ></front-end-internship-assignment-table-view>
 
         </div>
 
@@ -38,10 +39,18 @@
             Book not in our library yet!
           </div>
         </div>
-        <footer *ngIf="novalues == false" class="tw-flex tw-items-center tw-justify-center tw-m-24-px ">
-          <button (click)="prevPage()" class="button tw-mr-2 hover:tw-cursor-pointer">Prev</button>
-          <span>{{count}}/{{outputLength/10}}</span>
-          <button (click)="nextPage()" class="button tw-ml-2 hover:tw-cursor-pointer">Next</button>
+        <footer *ngIf="novalues == false" class="tw-flex tw-items-center tw-gap-4 md:tw-gap-8 tw-m-24-px tw-justify-center md:tw-justify-between">
+          <div class="tw-flex tw-items-center tw-justify-center">
+            <button (click)="prevPage()" class="button tw-mr-2 hover:tw-cursor-pointer">Prev</button>
+            <span>{{count}}</span>
+            <button (click)="nextPage()" class="button tw-ml-2 hover:tw-cursor-pointer">Next</button>
+          </div>
+          <div class="tw-flex tw-gap-1 tw-w-[35px] tw-items-center tw-flex-1">
+            <p class="tw-text-[15px] md:tw-text-14-px">Results per page</p>
+            <input type="number" value="10" class="tw-w-[30px] tw-rounded-[8px] tw-flex tw-justify-center tw-items-center" id="pageLimit" (keyup.enter)="pageLimitSetter()"/>
+            <button class="button tw-ml-2 hover:tw-cursor-pointer" (click)="pageLimitSetter()">Set</button>
+          </div>
+          
         </footer>
       </div>
     </ng-template>

@@ -11,88 +11,94 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
+
+
 export class HomeComponent implements OnInit {
   bookSearch: FormControl;
   searchToggle: boolean;
-  searchTerm:string;
+  searchTerm: string;
   allBooks: Book[] = [];
   novalues: boolean = false;
-  partValues: Book[] = [];
-  count:number = 1;
-  lower:number = 0;
-  higher:number = 10;
-  outputLength: number = 0;
-  
+  count: number = 1;
+  pageLimit: any = 10;
+  offset: any = 0;
+
+
 
   constructor(
     private subjectsService: SubjectsService,
     private ngxService: NgxUiLoaderService
-    ) {
+  ) {
     this.bookSearch = new FormControl('');
     this.searchToggle = false;
     this.searchTerm = '';
   }
 
   searchedBooks() {
-    if(localStorage.getItem(`${this.searchTerm}`)){
-      const output:string = localStorage.getItem(`${this.searchTerm}`)!;
-      this.allBooks = JSON.parse(output);
-      console.log('this is output from localStorage', this.allBooks)
-      this.outputLength = this.allBooks.length;
-      this.partValues = this.allBooks.slice(0,10);
+    if (localStorage.getItem(`${this.searchTerm}:${this.count}:${this.pageLimit}`)) {
+      const output = JSON.parse(localStorage.getItem(`${this.searchTerm}:${this.count}:${this.pageLimit}`)!)
+      this.allBooks = output;
       this.ngxService.stop();
-      
     }
-    else{
-      this.subjectsService.searchForBooks(this.searchTerm).subscribe((data) => {
-        localStorage.setItem(this.searchTerm, JSON.stringify(data?.docs))
-        this.outputLength = data?.docs.length;
-        this.setter(data?.docs)
+    else {
+      this.ngxService.start();
+      this.subjectsService.searchForBooks(this.searchTerm, this.pageLimit, this.offset).subscribe((data) => {
+        console.log('API called')
         this.allBooks = data?.docs;
-        this.partValues = data?.docs.slice(0,10);
-        console.log(this.allBooks)
-        if(this.allBooks.length == 0){
+        if (this.allBooks.length == 0) {
           this.novalues = true;
         }
-        // this.subjectsArray = data;
+        else {
+          localStorage.setItem(`${this.searchTerm}:${this.count}:${this.pageLimit}`, JSON.stringify(data?.docs))
+        }
         this.ngxService.stop();
-          
       });
-    }  
-  }
-
-  setter(data:Book[]) {
-    this.allBooks = data;
-    this.partValues = this.allBooks.slice(this.lower, this.higher);
+    }
 
   }
-  
 
-    clicker(event:any){
-    this.ngxService.start();
-    this.searchTerm= (event.target as HTMLInputElement).value;
-    (event.target as HTMLInputElement).value = '';
-    this.searchToggle = true;
+
+
+  pageLimitSetter() {
+    this.ngxService.start()
+    const element = document.getElementById('pageLimit') as HTMLInputElement;
+    const value = element.value;
+    this.pageLimit = value;
+    console.log('this is new pageLimit', this.pageLimit)
+    this.count = 1;
     this.searchedBooks();
   }
 
-  nextPage(){
-    if(this.count<(this.allBooks.length/10)){
-      this.count++;
-      this.lower = (this.count-1)*10
-      this.higher = (this.count-1)*10+10;
-      this.setter(this.allBooks)
+
+  clicker() {
+    const element = document.getElementById('searchbox')
+    if (!(element as HTMLInputElement).value) {
+      alert('enter a search value')
     }
+    else {
+      this.ngxService.start();
+
+      this.searchTerm = (element as HTMLInputElement).value;
+      (element as HTMLInputElement).value = '';
+      this.searchToggle = true;
+      this.searchedBooks();
+    }
+
   }
 
-  prevPage(){
-    if(this.count>1){
+  nextPage() {
+    this.count++;
+    this.offset = this.count * this.pageLimit;
+    this.searchedBooks()
+  }
+
+  prevPage() {
+    if (this.count > 1) {
       this.count--;
-      this.lower = (this.count-1)*10
-      this.higher = (this.count-1)*10+10;
-      this.setter(this.allBooks)
+      this.offset = this.count * this.pageLimit;
+      this.searchedBooks()
     }
-      
+
   }
 
   trendingSubjects: Array<any> = [
@@ -109,7 +115,7 @@ export class HomeComponent implements OnInit {
         debounceTime(300),
       ).
       subscribe((value: string) => {
-        
+
       });
   }
 }
