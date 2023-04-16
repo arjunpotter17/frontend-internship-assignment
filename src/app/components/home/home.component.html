@@ -1,3 +1,5 @@
+
+<!--Header including title and searchbar-->
 <div class="header">
   <div class="tw-text-24-px tw-font-600">Open Books Library</div>
   <div class="search-button">
@@ -5,11 +7,14 @@
       placeholder="Search Books" class="tw-border-0 tw-bg-inherit tw-w-full focus:tw-outline-none"
       (keyup.enter)="clicker()">
     <mat-icon aria-label="Search Icon" (click) = clicker() class="hover:tw-cursor-pointer">search</mat-icon>
-
   </div>
-
 </div>
+
+
+<!--Rest of the page begins-->
 <div class="tw-flex tw-flex-col md:tw-flex-row tw-m-24-px">
+
+  <!--Trending subjects section-->
   <section class="trending-subjects">
     <div class="tw-font-600 tw-text-24-px tw-text-center">Trending Subjects</div>
     <div class="tw-overflow-auto tw-scrollbar-thin tw-scrollbar-track-slate-500 tw-scrollbar-thumb-slate-300">
@@ -22,16 +27,20 @@
     </div>
   </section>
 
+  <!--Search Results section-->
   <section class="tw-flex-1 tw-flex tw-items-center tw-justify-center">
+
+    <!--Placeholder text before searching-->
     <div *ngIf="searchToggle == false; else Books" class="tw-w-full tw-text-center tw-mt-8">
       Search for a book!
     </div>
+
+     <!--Search Results start-->
     <ng-template #Books>
       <div class="tw-flex-1">
         <div *ngIf="novalues == false" class="tw-mx-auto w-full">
           <front-end-internship-assignment-table-view [booksList]="allBooks" [subjectName]="searchTerm"
            ></front-end-internship-assignment-table-view>
-
         </div>
 
         <div *ngIf="novalues == true">
@@ -39,6 +48,8 @@
             Book not in our library yet!
           </div>
         </div>
+
+        <!--Footer section including pagination and number of results per page-->
         <footer *ngIf="novalues == false" class="tw-flex tw-items-center tw-gap-4 md:tw-gap-8 tw-m-24-px tw-justify-center md:tw-justify-between">
           <div class="tw-flex tw-items-center tw-justify-center">
             <button (click)="prevPage()" class="button tw-mr-2 hover:tw-cursor-pointer">Prev</button>
@@ -50,9 +61,10 @@
             <input type="number" value="10" class="tw-w-[30px] tw-rounded-[8px] tw-flex tw-justify-center tw-items-center" id="pageLimit" (keyup.enter)="pageLimitSetter()"/>
             <button class="button tw-ml-2 hover:tw-cursor-pointer" (click)="pageLimitSetter()">Set</button>
           </div>
-          
         </footer>
       </div>
     </ng-template>
+    <!--Search Results end-->
   </section>
+
 </div>

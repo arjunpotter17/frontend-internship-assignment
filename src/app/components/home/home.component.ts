@@ -15,13 +15,13 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 export class HomeComponent implements OnInit {
   bookSearch: FormControl;
-  searchToggle: boolean;
-  searchTerm: string;
-  allBooks: Book[] = [];
-  novalues: boolean = false;
-  count: number = 1;
-  pageLimit: any = 10;
-  offset: any = 0;
+  searchToggle: boolean = false; //toggle variable to remove placeholder text
+  searchTerm: string = ''; //variable that stores the term entered in the searchbox
+  allBooks: Book[] = []; //variable to store results
+  novalues: boolean = false; //toggle variable in case book isn't available
+  count: number = 1;  //page number
+  pageLimit: number = 10; // variable that stores number of results in a page (default 10)
+  offset: number = 0; //offset variable to modify url as per query
 
 
 
@@ -30,18 +30,22 @@ export class HomeComponent implements OnInit {
     private ngxService: NgxUiLoaderService
   ) {
     this.bookSearch = new FormControl('');
-    this.searchToggle = false;
-    this.searchTerm = '';
   }
 
+  // function to subscribe to the openLibrary API
   searchedBooks() {
+
+    //check if result already exists in localStorage
     if (localStorage.getItem(`${this.searchTerm}:${this.count}:${this.pageLimit}`)) {
       const output = JSON.parse(localStorage.getItem(`${this.searchTerm}:${this.count}:${this.pageLimit}`)!)
       this.allBooks = output;
+      //stop loader
       this.ngxService.stop();
     }
     else {
+      //start loader
       this.ngxService.start();
+
       this.subjectsService.searchForBooks(this.searchTerm, this.pageLimit, this.offset).subscribe((data) => {
         console.log('API called')
         this.allBooks = data?.docs;
@@ -49,6 +53,7 @@ export class HomeComponent implements OnInit {
           this.novalues = true;
         }
         else {
+          //store results in localStorage
           localStorage.setItem(`${this.searchTerm}:${this.count}:${this.pageLimit}`, JSON.stringify(data?.docs))
         }
         this.ngxService.stop();
@@ -59,17 +64,25 @@ export class HomeComponent implements OnInit {
 
 
 
+  //function that takes value from input and sets results per page
   pageLimitSetter() {
-    this.ngxService.start()
     const element = document.getElementById('pageLimit') as HTMLInputElement;
     const value = element.value;
-    this.pageLimit = value;
-    console.log('this is new pageLimit', this.pageLimit)
-    this.count = 1;
-    this.searchedBooks();
+    if(value === ''){
+      alert('set a valid limit');
+    }
+    else{
+      this.ngxService.start()
+      console.log('this is type of value',typeof value);
+      this.pageLimit = parseInt(value);
+      this.count = 1;
+      this.searchedBooks();
+    }
+    
   }
 
 
+  //function that runs when searched
   clicker() {
     const element = document.getElementById('searchbox')
     if (!(element as HTMLInputElement).value) {
@@ -77,7 +90,6 @@ export class HomeComponent implements OnInit {
     }
     else {
       this.ngxService.start();
-
       this.searchTerm = (element as HTMLInputElement).value;
       (element as HTMLInputElement).value = '';
       this.searchToggle = true;
@@ -86,12 +98,14 @@ export class HomeComponent implements OnInit {
 
   }
 
+  //function to travel to next page
   nextPage() {
     this.count++;
     this.offset = this.count * this.pageLimit;
     this.searchedBooks()
   }
 
+  //function to travel to previous page
   prevPage() {
     if (this.count > 1) {
       this.count--;
@@ -106,7 +120,7 @@ export class HomeComponent implements OnInit {
     { name: 'CSS' },
     { name: 'HTML' },
     { name: 'Harry Potter' },
-    { name: 'njdkwnfk' },
+    { name: 'Angular' },
   ];
 
   ngOnInit(): void {

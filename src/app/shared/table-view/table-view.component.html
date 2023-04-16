@@ -16,6 +16,7 @@
             <a class="tw-no-underline" href="https://openlibrary.org{{ book.key }}" target="_blank">{{ book.title.length > 12 ? book.title.slice(0,12)+'...' : book.title }}</a>
           </td>
           <td>
+            <!--Added checker to see if value is from searchAPI or subjectsAPI-->
             {{ book.author_name? book.author_name[0] : !book.authors ? 'unknown' : book.authors.length > 0 ? book.authors[0].name : "unknown" }}
           </td>        
           <td>{{ book.first_publish_year }}</td>

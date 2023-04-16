@@ -30,17 +30,17 @@ export class TrendingSubjectsComponent implements OnInit {
     this.subjectsService.getAllBooks(this.subjectName).subscribe((data) => {
       
         this.allBooks = data?.works;
-        console.log('this is subject books', this.allBooks)
       if(this.allBooks.length == 0){
         this.novalues = true;
       }
-      // this.subjectsArray = data;
+      //loader stop
       this.ngxService.stop();
       
     });
   }
 
   ngOnInit(): void {
+    //loader start
     this.ngxService.start();
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.subjectName = params.get('name') || '';
